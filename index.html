@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        /* Added Playfair Display for a more elegant personal note */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Montserrat:wght@300;400;600&display=swap');
+
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            text-align: center; 
+            background: #0f0c29;
+            background: linear-gradient(to bottom, #24243e, #302b63, #0f0c29);
+            color: #ffffff;
+            margin: 0; 
+            display: flex; align-items: center; justify-content: center;
+            min-height: 100vh; padding: 20px; overflow-x: hidden;
+        }
+
+        .card { 
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            padding: 40px 25px; border-radius: 30px; 
+            max-width: 450px; width: 100%;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        /* Swaying Hearts Animation */
+        .heart-svg {
+            position: absolute; fill: #ff758c; opacity: 0;
+            pointer-events: none; z-index: 1;
+            animation: floatAndSway 5s ease-in-out forwards;
+        }
+        @keyframes floatAndSway {
+            0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            50% { transform: translateY(-150px) translateX(-20px) rotate(-15deg); }
+            100% { transform: translateY(-300px) translateX(20px) rotate(15deg); opacity: 0; }
+        }
+
+        /* Cake Container */
+        .cake-wrapper { 
+            position: relative; 
+            width: 200px; height: 200px; 
+            margin: 10px auto; 
+            display: flex; justify-content: center; align-items: center;
+        }
+        .cake-gif {
+            width: 100%; height: auto; border-radius: 20px;
+        }
+        #cake-blown { display: none; font-size: 50px; }
+
+        /* Reveal Section */
+        #reveal-section { display: none; animation: fadeInScale 1.2s ease-out forwards; }
+        @keyframes fadeInScale { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
+
+        .couple-gif { width: 100%; max-width: 320px; border-radius: 20px; border: 3px solid rgba(255,255,255,0.2); margin: 20px 0; }
+        
+        /* NEW FONT STYLE FOR PERSONAL NOTE */
+        .personal-note { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 1.2rem; 
+            font-style: normal;
+            color: #ffb3ba; 
+            line-height: 1.8; 
+            white-space: pre-line; 
+            margin: 25px 0;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .closing { 
+            font-family: 'Playfair Display', serif;
+            font-weight: 600; 
+            color: #ff758c; 
+            margin-top: 20px; 
+            font-size: 1.5rem; 
+            font-style: normal;
+        }
+
+        button { 
+            background: #ff4d4d; color: white; border: none; padding: 15px 35px; border-radius: 50px; 
+            font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.3s; z-index: 10;
+        }
+        button:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 77, 77, 0.4); }
+        #status { margin: 20px; color: #ffb3ba; font-style: normal; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+
+<div class="card" id="mainCard">
+    <div class="cake-wrapper" id="cake-area">
+        <img id="cake-lit" class="cake-gif" src="https://i.postimg.cc/jdgVkxwB/IMG-0351.jpg" alt="Birthday Cake">
+        <div id="cake-blown">✨✨</div>
+    </div>
+
+    <div id="status">Made With Love For You</div>
+    <button id="micBtn" onclick="startMic()">Ready To Check It Out</button>
+
+    <div id="reveal-section">
+        <img src="https://i.postimg.cc/d1J49SrJ/B3ADF171-60F8-4338-AEFF-48209290B665.gif" class="couple-gif">
+        
+        <div class="personal-note">
+            Happy Birthday Pu Kyuu Tone 💓
+
+            I hope this year brings you happy moments, lots of smiles, and time to just breathe and feel proud of yourself. Whenever you are down, remember you’re never alone. I’m always here, quietly cheering you on, believing in you, and loving you. I would love to be with you in your dreams, your struggles, and all the little ways you give your best.
+
+            Keep being you. The world is better with you in it.
+            Let's enjoy your day, you amazing little weirdo 😏🤍
+            
+            <div class="closing">Happy Birthday 🎂✨</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let blownOut = false;
+
+    function createHeart() {
+        if (blownOut) return;
+        const heart = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        heart.setAttribute("viewBox", "0 0 32 32");
+        heart.classList.add("heart-svg");
+        heart.innerHTML = '<path d="M16 28.5L14.1 26.8C7.3 20.7 2.8 16.6 2.8 11.5 2.8 7.4 6 4.2 10.1 4.2 12.4 4.2 14.6 5.3 16 7.1 17.4 5.3 19.6 4.2 21.9 4.2 26 4.2 29.2 7.4 29.2 11.5 29.2 16.6 24.7 20.7 17.9 26.8L16 28.5Z"/>';
+        
+        const size = Math.random() * 20 + 10;
+        heart.style.width = size + 'px';
+        heart.style.left = (Math.random() * 80 + 10) + '%';
+        heart.style.bottom = '45%';
+        heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+        
+        document.getElementById('mainCard').appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+    }
+    setInterval(createHeart, 600);
+
+    async function startMic() {
+        document.getElementById('micBtn').style.display = 'none';
+        document.getElementById('status').innerText = "Make a wish and BLOW! 🌬️";
+
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const analyser = audioContext.createAnalyser();
+            const source = audioContext.createMediaStreamSource(stream);
+            const processor = audioContext.createScriptProcessor(2048, 1, 1);
+
+            analyser.fftSize = 512;
+            source.connect(analyser);
+            analyser.connect(processor);
+            processor.connect(audioContext.destination);
+
+            processor.onaudioprocess = function() {
+                const array = new Uint8Array(analyser.frequencyBinCount);
+                analyser.getByteFrequencyData(array);
+                let volume = array.reduce((a, b) => a + b) / array.length;
+
+                if (volume > 45 && !blownOut) {
+                    reveal();
+                    blownOut = true;
+                    stream.getTracks().forEach(t => t.stop());
+                }
+            };
+        } catch (err) {
+            document.getElementById('status').innerText = "Mic denied? Tap the cake to blow out!";
+            document.getElementById('cake-area').onclick = reveal;
+        }
+    }
+
+    function reveal() {
+        document.getElementById('cake-lit').style.display = 'none';
+        document.getElementById('cake-blown').style.display = 'block';
+        document.getElementById('status').style.display = 'none';
+        document.getElementById('reveal-section').style.display = 'block';
+        
+        confetti({
+            particleCount: 200, spread: 80, origin: { y: 0.7 },
+            colors: ['#ff4d4d', '#ff758c', '#ffffff', '#ffd700']
+        });
+    }
+</script>
+
+</body>
+</html>
